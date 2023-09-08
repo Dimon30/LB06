@@ -1,5 +1,6 @@
 package Modules;
 
+import Commands.Command;
 import Organization.Organization;
 
 import java.io.IOException;
@@ -23,6 +24,17 @@ public class SendResponse {
             //System.out.println("Message successful send");
         } catch (Exception e){
             System.out.println("Error");
+        }
+    }
+
+    public static void sendResponseCommand(Socket socket, String response){
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            Command temp = new Command();
+            temp.setMessage(response);
+            objectOutputStream.writeObject(temp);
+        }catch (Exception e){
+            System.out.println("Command message not sent");
         }
     }
 

@@ -29,6 +29,7 @@ public class Read_XML {
         }
         catch (Exception e){
             SendResponse.sendResponse(socket, "Not found input file\nI created new blank collection\n");
+            return new Vector<Organization> (0);
         }
         Vector<Organization> org = new Vector<>();
         ArrayList<Map> arr = new ArrayList<Map>();
@@ -133,6 +134,7 @@ public class Read_XML {
         }
         catch(Exception e){
             SendResponse.sendResponse(socket, "Not download xml file");
+            return new Vector<Organization> (0);
         }
         finally {SendResponse.sendResponse(socket, "Xml file successfully downloaded");
             org.stream().sorted(Comparator.comparing(Organization::getName)); return org;}
