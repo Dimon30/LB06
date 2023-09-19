@@ -1,15 +1,13 @@
 package Commands;
 
-import Organization.Organization;
+import java.io.Serial;
+import java.util.Arrays;
 
-import java.util.Vector;
-
-public class Show extends Command{
+public final class Show extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "show";
     private final static String description = ": Show all organizations in collection;";
-    private static String[] arg;
-    private static Vector<Organization> org;
-
 
     /**
      * Function to get name of command
@@ -22,10 +20,7 @@ public class Show extends Command{
      */
     public static String getDescription(){return description;}
 
-    public static String show() {
-        if (arg.length > 0) {
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n";
-        }
+    public String execute() {
         if (org.stream().count() == 0) {
             return "Collection is empty\n";
         }
@@ -36,13 +31,19 @@ public class Show extends Command{
             showReturn[0] += "Organization #" + i[0] + ":\n";
             i[0] += 1;
             showReturn[0] += o.print();
-            showReturn[0] += "-----------------------\n";
+            showReturn[0] += "------------------------------";
         });
         } catch(Exception e) {
-            e.printStackTrace();
+            System.out.println("Show::execute: 'Can't show collection'");
         }
         return showReturn[0];
-
     }
-    public void setOrg(Vector<Organization> organizations) {this.org = organizations;}
+
+    public boolean validate(){
+        if (arg.length > 0){
+            System.out.println("Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n");
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,18 +1,18 @@
 package Commands;
 
 import Organization.Organization;
+import java.io.Serial;
 import java.util.Comparator;
 import java.util.Vector;
-import java.util.stream.Stream;
 
 /**
  * Class for working with command: print_field_descending_postal_address
  */
-public class PrintByAddressDescending extends Command{
+public final class PrintByAddressDescending extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "print_field_descending_postal_address";
     private final static String description = ": Print field descending postal address;";
-    private static String[] arg;
-    private static Vector<Organization> org;
 
     /**
      * Function to get name of command
@@ -28,19 +28,21 @@ public class PrintByAddressDescending extends Command{
     /**
      * Function to print organizations by descending postal address
      */
-    public static String print_field_descending_postal_address(){
-        if (arg.length > 0){
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n";
-        }
+    public String execute(){
         Vector<Organization> result = org.stream()
                 .sorted(Comparator.comparing(Organization::getAddress).reversed())
                 .collect(Vector<Organization>::new, Vector<Organization>::add,Vector<Organization>::addAll);
         Show show = new Show();
         show.setOrg(result);
-        return Show.show();
+        return new Show().execute();
         //Command.showOtherList(result);
     }
-    public String execute(){return print_field_descending_postal_address();}
-    public Vector<Organization> getOrg(){return org;}
-    public void setOrg(Vector<Organization> organizations) {this.org = organizations;}
+
+    public boolean validate(){
+        if (arg.length > 0){
+            System.out.println("I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n");
+            return false;
+        }
+        return true;
+    }
 }

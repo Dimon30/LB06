@@ -1,15 +1,16 @@
 package Commands;
 
 import Organization.Organization;
-
+import java.io.Serial;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Vector;
 
-public class Sort extends Command{
+public final class Sort extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "sort";
     private final static String description = ": Sort collection;";
-    private static String[] arg;
-    private static Vector<Organization> org;
 
     /**
      * Function to get name of command
@@ -21,15 +22,19 @@ public class Sort extends Command{
      * @return description of command
      */
     public static String getDescription(){return description;}
-    public static void sort(){
-        if (arg.length > 0){
-            System.out.println("I don't understand u\n What does it mean: " + getName() + " " + arg[0]);
-            return;
-        }
+
+    public String execute(){
         org = org.stream()
                 .sorted(Comparator.comparing(Organization::getName))
                 .collect(Vector<Organization>::new, Vector<Organization>::add,Vector<Organization>::addAll);
+        return "Collection was sorted";
     }
-    public Vector<Organization> getOrg(){return org;}
-    public void setOrg(Vector<Organization> organizations) {this.org = organizations;}
+
+    public boolean validate(){
+        if (arg.length > 0){
+            System.out.println("Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n");
+            return false;
+        }
+        return true;
+    }
 }
