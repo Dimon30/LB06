@@ -4,7 +4,7 @@ import Modules.SendResponse;
 import Organization.*;
 import java.io.File;
 import java.io.FileReader;
-import java.net.Socket;
+import java.nio.channels.SocketChannel;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,16 +19,18 @@ public class Read_XML {
      * @param filename name of file where is description of organizations
      * @return  collection of organizations
      */
-    public static Vector<Organization> CreateVector(Socket socket, String filename) {
+    public static Vector<Organization> CreateVector(SocketChannel socket, String filename) {
         File file = new File(filename);
         StringBuilder str = new StringBuilder();
+        Message message = new Message(socket);
         try (Scanner reader = new Scanner(new FileReader(file.getAbsolutePath()))) {
             while (reader.hasNext()) {
                 str.append(reader.next());
             }
         }
         catch (Exception e){
-            SendResponse.sendResponse(socket, "Not found input file\nI created new blank collection\n");
+            message.create(socket, "Not found input file\nI created new blank collection\n");
+            SendResponse.sendMessage(message);
             return new Vector<Organization> (0);
         }
         Vector<Organization> org = new Vector<>();
@@ -133,10 +135,13 @@ public class Read_XML {
             }
         }
         catch(Exception e){
-            SendResponse.sendResponse(socket, "Not download xml file");
+            message.create(socket, "Not download xml file");
+            SendResponse.sendMessage(message);
             return new Vector<Organization> (0);
         }
-        finally {SendResponse.sendResponse(socket, "Xml file successfully downloaded");
+        finally {
+            message.create(socket, "Xml file successfully download");
+            SendResponse.sendMessage(message);
             org.stream().sorted(Comparator.comparing(Organization::getName)); return org;}
     }
 }

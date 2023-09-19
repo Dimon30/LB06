@@ -1,21 +1,16 @@
 package Commands;
 
-import Organization.Organization;
-
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Vector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.Serial;
+import java.util.Arrays;
 
 /**
  * Class for actions with command: clear
  */
-public class Clear extends Command{
+public final class Clear extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "clear";
     private final static String description = ": Clear collection;";
-    private static String[] arg;
-    private static Vector<Organization> org;
 
     /**
      * Function to get name of command
@@ -31,19 +26,20 @@ public class Clear extends Command{
     /**
      * Function clear collection
      */
-    public static String clear(){
-        if (arg.length > 0){
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n";
-        }
+    public String execute(){
         try {
             org.clear();
             return "Now the collection is empty.\n";
         } catch (Exception e) {
             return "Error cleaning..\n";
         }
-
     }
-    public String execute(){return clear();}
-    public Vector<Organization> getOrg(){return org;}
-    public void setOrg(Vector<Organization> organizations) {org = organizations;}
+
+    public boolean validate(){
+        if (arg.length > 0) {
+            System.out.println("Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n");
+            return false;
+        }
+        return true;
+    }
 }

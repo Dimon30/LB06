@@ -1,17 +1,17 @@
 package Commands;
 
 import Organization.Organization;
-
-import java.util.Vector;
+import java.io.Serial;
+import java.util.Arrays;
 
 /**
  * Class for work with command: info
  */
-public class Info extends Command{
+public final class Info extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "info";
     private static final String description = ": About collection";
-    private static String[] arg;
-    private static Vector<Organization> org;
 
     /**
      * Function to get name of command
@@ -27,19 +27,22 @@ public class Info extends Command{
     /**
      * Function print information about collection
      */
-    public static String info() {
-
-        if (arg.length > 0){
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n";
-        }
+    public String execute() {
+        if (org.isEmpty())
+            return "Collection is empty";
         Organization date = (Organization)(org.stream().findFirst().orElseThrow());
         int size = (int)org.stream().count();
         String infoReturn = "";
         infoReturn += "Date of initialization collection: " + date.getLastUpdate() + "\n";
-        infoReturn += "Size of collection: " + Integer.valueOf(size) + "\n";
+        infoReturn += "Size of collection: " + size;
         return infoReturn;
     }
-    public Vector<Organization> getOrg(){return org;}
-    public void setOrg(Vector<Organization> organizations) {this.org = organizations;}
-    public String execute(){return info();}
+
+    public boolean validate(){
+        if (arg.length > 0){
+            validateInfo = "Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n";
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,16 +1,19 @@
 package Commands;
 
+import java.io.Serial;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 /**
  * Class for work with command: history
  */
-public class History extends Command{
+public final class History extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "history";
     private final static String description = ": Show 8 last commands;";
-    private static String[] arg;
-    private static Deque<String> history = new ArrayDeque<>(8);
+    private static final Deque<String> history = new ArrayDeque<>(8);
 
 
     /**
@@ -24,19 +27,28 @@ public class History extends Command{
      */
     public static String getDescription(){return description;}
 
+    public static void memorize(String command) {
+        history.offer(command);
+
+        if (history.size() > 8) {
+            history.pop();
+        }
+    }
+
     /**
      * Function print last 8 commands which user inputted
      */
-    public static String history() {
-
-        if (arg.length > 0){
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0];
-        }
+    public String execute() {
         String[] historyReturn = {""};
         history.forEach(h -> historyReturn[0] += h);
         return historyReturn[0];
     }
-    public String execute(){return history();}
 
-    public static void setHistory(Deque<String> his){history = his;}
+    public boolean validate(){
+        if (arg.length > 0){
+            System.out.println("Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n");
+            return false;
+        }
+        return true;
+    }
 }

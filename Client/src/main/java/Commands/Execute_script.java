@@ -1,21 +1,26 @@
 package Commands;
 
 
+import Auxiliary.Message;
+import Organization.Organization;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
 /**
  * Class for actions with command: execute_script
  */
-public class Execute_script extends Command{
+public final class Execute_script extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "execute_script";
     private final static String description = ": Load commands from file;";
-    private static String[] arg;
+    private ArrayList<Message> Messages = new ArrayList<Message>();
 
     /**
      * Function to get name of command
@@ -31,37 +36,61 @@ public class Execute_script extends Command{
     /**
      * Function take file and execute commands
      */
-    public static String execute_script(){
-        if (arg.length == 0) {
-            return "Please input filename in format: 'execute_script filename'\n";
+    public String execute(){
+        StringBuilder executeReturn = new StringBuilder();
+        try {
+            for (Message message : Messages){
+                if(!message.validate())
+                    continue;
+                message.setOrg(org);
+                executeReturn
+                        .append("'")
+                        .append(message.getCommandArg())
+                        .append("'\n")
+                        .append(message.getCommand().execute())
+                        .append("\n");
+                History.memorize(message.getCommandArg());
+            }
+        } catch (Exception e) {
+            return "Execute_script::execute: 'Something is going wrong'";
         }
+        return executeReturn.toString();
+    }
+    private void processingFile(){
         String filename = arg[0];
         File file = new File(filename);
-        String str = "";
+        StringBuilder str = new StringBuilder();
         String[] lines;
-        String executeReturn = "";
         try (Scanner reader = new Scanner(new FileReader(file.getAbsolutePath()))) {
-            while (reader.hasNext()) {
-                str += reader.next() + "\n";
+            while (reader.hasNextLine()) {
+                str.append(reader.nextLine()).append("\n");
             }
-            lines = str.split("\n");
+            lines = str.toString().split("\n");
             for (String command_arg : lines) {
-                if(Command.validate(command_arg))
+                Message message = new Message();
+                message.setCommandArg(command_arg);
+                if (command_arg.equals("add"))
+                    message.setOrganization(Add.processingAdd(new Scanner(System.in)));
+                if (command_arg.split("s")[0].equals("update")) {
+                    System.out.println("To execution command 'update', you need input this command in terminal");
                     continue;
-                String[] split = command_arg.split("\s");
-                String command = split.length > 1 ? split[0] : command_arg;
-                String[] arg = split.length > 1 ? Arrays.copyOfRange(split, 1, split.length) : new String[0];
-                executeReturn += "'" + command_arg + "'\n";
-                Command com = (Command) Command.getCommand(command);
-                com.setArg(arg);
-                executeReturn += com.execute();
+                }
+
+                Messages.add(message);
             }
         } catch (FileNotFoundException e){
-            return "Sorry, I don't find this file: '" + filename + "'";
+            System.out.println("Sorry, I don't find this file: '" + filename + "'");
         } catch (Exception e) {
-            return "Something is going wrong(class: Execute_script)";
+            System.out.println("Execute_script::execute: 'Something is going wrong'");
         }
-        return executeReturn;
     }
-    public String execute(){return execute_script();}
+    public boolean validate(){
+        if (arg.length != 1) {
+            System.out.println("Please input filename in format: 'execute_script filename'\n");
+            return false;
+        }
+        processingFile();
+        return true;
+    }
+
 }

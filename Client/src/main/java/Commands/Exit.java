@@ -1,26 +1,16 @@
 package Commands;
 
+import java.io.Serial;
+import java.util.Arrays;
+
 /**
  * Class for actions with command: exit
  */
-public class Exit extends Command{
+public final class Exit extends Command{
+    @Serial
+    private static final long serialVersionUID = 14130070678758251L;
     private static final String name = "exit";
     private static final String description = ": exit;";
-    private static String[] arg;
-
-    /**
-     * Function to abort program
-     */
-    public static String exit(){
-
-        if (arg.length > 0){
-            return "I don't understand u\n What does it mean: " + getName() + " " + arg[0] + "\n";
-        }
-        System.exit(30);
-        return "exit";
-    }
-
-    public String execute(){return exit();}
 
     /**
      * Function to get name of command
@@ -33,5 +23,17 @@ public class Exit extends Command{
      */
     public static String getDescription(){return description;}
 
-    public void setArg(String[] ar){arg = ar;}
+    /**
+     * Function to abort program
+     */
+    public String execute(){System.exit(30);return null;}
+
+    public boolean validate(){
+        if (arg.length > 0){
+            System.out.println("Incorrect data's: " + getName() + " " + Arrays.toString(arg) + "\n");
+            return false;
+        }
+        return true;
+    }
+
 }

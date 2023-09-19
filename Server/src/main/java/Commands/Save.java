@@ -1,18 +1,13 @@
 package Commands;
 
 import Auxiliary.Write_XML;
-import Organization.Organization;
-
-import java.util.Vector;
 
 /**
  * Class for working with command: save
  */
-public class Save extends Command{
+public final class Save extends Command{
     private static final String name = "save";
     private final static String description = ": Save collection in file;";
-    private static String[] arg;
-    private static Vector<Organization> org;
 
     /**
      * Function to get name of command
@@ -28,20 +23,12 @@ public class Save extends Command{
     /**
      * Function to save collection in file xml
      */
-    public static String save(){
-        if (arg.length == 0) {
-            return "Please input filename in format: 'save filename'\n" + "\n";
-        }
+    public void save(){
         try {
-            String[] a = arg[0].split("\\.");
-            String filename = arg[0].contains(".") ? a[0] : arg[0];
-            Write_XML.Write(org.stream(), filename + ".xml");
-            return "File was successfully written\n";
+            Write_XML.Write(org.stream(), "Organizations.xml"/*"src/main/resources/Organizations.xml"*/);
         } catch (Exception e){
-            return "File's not written\n";
+            e.printStackTrace();
+            System.out.println("Error in saving file");
         }
     }
-    //public String execute(){return save();}
-    public Vector<Organization> getOrg(){return org;}
-    public void setOrg(Vector<Organization> organizations) {org = organizations;}
 }
