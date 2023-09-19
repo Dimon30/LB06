@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Organizations>
+	<Organization>
+		<id>123</id>
+		<name>VkusnoiTochka</name>
+		<Coordinates>
+			<x>0</x>
+			<y>0.0</y>
+		</Coordinates>
+		<creationDate>2023-09-19</creationDate>
+		<annualTurnover>239.3</annualTurnover>
+		<type>GOVERNMENT</type>
+		<postalAddress>
+			<zipCode>239239</zipCode>
+			<street>CGSG</street>
+			<Location>
+				<x>0</x>
+				<y>0</y>
+				<town>name</town>
+			</Location>
+		</postalAddress>
+		<lastUpdate>2023-09-19</lastUpdate>
+	</Organization>
+	<Organization>
+		<id>221461477</id>
+		<name>itmo</name>
+		<Coordinates>
+			<x>0</x>
+			<y>0.0</y>
+		</Coordinates>
+		<creationDate>2023-09-19</creationDate>
+		<annualTurnover>1.0</annualTurnover>
+		<type>TRUST</type>
+		<postalAddress>
+			<zipCode>1</zipCode>
+			<street>1</street>
+			<Location>
+				<x>0</x>
+				<y>0</y>
+				<town>1</town>
+			</Location>
+		</postalAddress>
+		<lastUpdate>2023-09-19</lastUpdate>
+	</Organization>
+</Organizations>

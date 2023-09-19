@@ -1,16 +1,29 @@
 package Modules;
 
+import Auxiliary.Message;
+import Commands.Command;
 import Organization.Organization;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class SendResponse {
+
+    public static void sendMessage(Message message) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(message);
+            objectOutputStream.close();
+            message.getSocket().write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error send Message");
+        }
+    }
     public static void sendResponse(Socket socket, String response){
         try{
             PrintWriter printWriter = new PrintWriter(
